@@ -31,6 +31,8 @@ const auth = require('./routes/auth');
 app.use('/api/auth', auth); // use route auth
 const content = require('./routes/content');
 app.use('/api/contents', content); // use route content
+const content_javanese = require('./routes/javanese_contents');
+app.use('/api/content_javaneses', content_javanese); // use route content_javanese
 
 
 

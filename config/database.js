@@ -2,9 +2,9 @@ let mysql = require('mysql');
 require('dotenv').config();
 
 let conn = mysql.createConnection({
-  host: '34.101.172.111',
+  host: 'localhost',
   user: 'root',
-  password: 'nusalingo2023',
+  password: '',
   database : 'db_nusalingo'
 });
 

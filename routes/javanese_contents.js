@@ -6,11 +6,11 @@ const connection = require('../config/database');
 const { body, validationResult } = require('express-validator');
 
 /**
- * INDEX QUIZ
+ * INDEX CONTENT
  */
 
 router.get('/', (req, res) => {
-  connection.query('SELECT * FROM question ORDER BY id ASC', (err, rows) => {
+  connection.query('SELECT * FROM content_javanese ORDER BY contentId ASC', (err, rows) => {
     if(err) {
       return res.status(500).json({
         status: false,
@@ -20,7 +20,7 @@ router.get('/', (req, res) => {
     } else {
       return res.status(200).json({
         status: true,
-        message: 'List Data Quiz',
+        message: 'List Learning Content',
         data: rows
       });
     }
@@ -28,18 +28,20 @@ router.get('/', (req, res) => {
 });
 
 /**
- * STORE QUIZ
+ * STORE CONTENT
  */
 
 router.post('/store', [
 
   //validation
+  body('image').notEmpty(),
   body('title').notEmpty(),
-  body('option1').notEmpty(),
-  body('option2').notEmpty(),
-  body('option3').notEmpty(),
-  body('option4').notEmpty(),
-  body('correctAnswer').notEmpty()
+  body('desc_one').notEmpty(),
+  body('desc_two').notEmpty(),
+  body('desc_three').notEmpty(),
+  body('desc_four').notEmpty(),
+  body('desc_five').notEmpty(),
+  body('desc_six').notEmpty()
     
 ], (req, res) => {
     
@@ -53,16 +55,18 @@ router.post('/store', [
     
         //define formData
         let formData = {
+          image: req.body.image,
           title: req.body.title,
-          option1: req.body.option1,
-          option2: req.body.option2,
-          option3: req.body.option3,
-          option4: req.body.option4,
-          correctAnswer: req.body.correctAnswer
+          desc_one: req.body.desc_one,
+          desc_two: req.body.desc_two,
+          desc_three: req.body.desc_three,
+          desc_four: req.body.desc_four,
+          desc_five: req.body.desc_five,
+          desc_six: req.body.desc_six 
         }
     
         // insert query
-    connection.query('INSERT INTO question SET ?', formData, function (err, rows) {
+    connection.query('INSERT INTO content_javanese SET ?', formData, function (err, rows) {
         //if(err) throw err
         if (err) {
             return res.status(500).json({
@@ -80,13 +84,13 @@ router.post('/store', [
 });
 
 /**
- * SHOW QUIZ
+ * SHOW CONTENT
  */
 
 router.get('/:id', function (req, res) {
   let id = req.params.id;
 
-  connection.query(`SELECT * FROM question WHERE id = ${id}`, function (err, rows) {
+  connection.query(`SELECT * FROM content_javanese WHERE contentId = ${id}`, function (err, rows) {
     if(err) {
       return res.status(500).json({
         status: false,
@@ -97,13 +101,13 @@ router.get('/:id', function (req, res) {
     if (rows.length <= 0) {
       return res.status(404).json({
         status: false,
-        message: 'Data Quiz Not Found!',
+        message: 'Data Content Not Found!',
       });
 
     } else {
       return res.status(200).json({
         status: true,
-        message: 'Detail Data Quiz',
+        message: 'Detail Data Learning Content',
         data: rows[0]
       });
     };
@@ -111,18 +115,20 @@ router.get('/:id', function (req, res) {
 });
 
 /**
- * UPDATE QUIZ
+ * UPDATE CONTENT
  */
 
 router.patch('/update/:id', [
 
   //validation
+  body('image').notEmpty(),
   body('title').notEmpty(),
-  body('option1').notEmpty(),
-  body('option2').notEmpty(),
-  body('option3').notEmpty(),
-  body('option4').notEmpty(),
-  body('correctAnswer').notEmpty()
+  body('desc_one').notEmpty(),
+  body('desc_two').notEmpty(),
+  body('desc_three').notEmpty(),
+  body('desc_four').notEmpty(),
+  body('desc_five').notEmpty(),
+  body('desc_six').notEmpty()
 
 ], (req, res) => {
 
@@ -134,21 +140,23 @@ router.patch('/update/:id', [
       });
   }
 
-  //id quiz
+  //id content
   let id = req.params.id;
 
-  //data quiz
+  //data content
   let formData = {
+    image: req.body.image,
     title: req.body.title,
-    option1: req.body.option1,
-    option2: req.body.option2,
-    option3: req.body.option3,
-    option4: req.body.option4,
-    correctAnswer: req.body.correctAnswer
+    desc_one: req.body.desc_one,
+    desc_two: req.body.desc_two,
+    desc_three: req.body.desc_three,
+    desc_four: req.body.desc_four,
+    desc_five: req.body.desc_five,
+    desc_six: req.body.desc_six
   }
 
   // update query
-  connection.query(`UPDATE question SET ? WHERE id = ${id}`, formData, function (err, rows) {
+  connection.query(`UPDATE content_javanese SET ? WHERE contentId = ${id}`, formData, function (err, rows) {
       //if(err) throw err
       if (err) {
           return res.status(500).json({
@@ -161,18 +169,17 @@ router.patch('/update/:id', [
               message: 'Update Data Successfully!'
           })
       }
-  })
-
+  });
 });
 
 /**
- * DELETE QUIZ
+ * DELETE CONTENT
  */
 router.delete('/delete/(:id)', function(req, res) {
 
   let id = req.params.id;
 
-  connection.query(`DELETE FROM question WHERE id = ${id}`, function(err, rows) {
+  connection.query(`DELETE FROM content_javanese WHERE contentId = ${id}`, function(err, rows) {
       //if(err) throw err
       if (err) {
           return res.status(500).json({
